@@ -19,7 +19,8 @@ model = load_model('models/' + MODEL_NAME)
 predict_dataset = tf.convert_to_tensor([
     [5.1, 3.3, 1.7, 0.5,],
     [5.9, 3.0, 4.2, 1.5,],
-    [6.9, 3.1, 5.4, 2.1]
+    [6.9, 3.1, 5.4, 2.1],
+    [5.7, 4.4, 1.5, 0.4]
 ])
 
 predictions = model(predict_dataset)

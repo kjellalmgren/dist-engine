@@ -23,7 +23,8 @@ def loss(model, x, y):
     return loss_object(y_true=y, y_pred=y_)
 #
 # main entry
-print("TensorFlow version: {}".format(tf.__version__))
+print("Tensorflow version1: {}".format(tf.version.VERSION))
+#print("TensorFlow version: {}".format(tf.__version__))
 print("Eager execution: {}".format(tf.executing_eagerly()))
 
 train_dataset_url = "https://storage.googleapis.com/download.tensorflow.org/data/iris_training.csv"
