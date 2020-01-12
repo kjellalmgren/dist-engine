@@ -22,29 +22,33 @@ def loss(model, x, y):
 
     return loss_object(y_true=y, y_pred=y_)
 #
+############
 # main entry
+############
+#
+MODEL_NAME = 'models/segment_model.h5'
+#
 print("Tensorflow version: {}".format(tf.version.VERSION))
 #print("TensorFlow version: {}".format(tf.__version__))
 print("Eager execution: {}".format(tf.executing_eagerly()))
 
-train_dataset_url = "https://storage.googleapis.com/download.tensorflow.org/data/iris_training.csv"
+train_dataset_url = "https://localhost:8443/v1/segments"
 
 train_dataset_fp = tf.keras.utils.get_file(fname=os.path.basename(train_dataset_url),
                                            origin=train_dataset_url)
-
-print("Local copy of the dataset file: {}".format(train_dataset_fp))
-#
 # column order in CSV file
-column_names = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'species']
+column_names = ['revenue', 'segment']
 
 feature_names = column_names[:-1]
 label_name = column_names[-1]
-
+#
+print("Local copy of the dataset file: {}".format(train_dataset_fp))
+#
 print("Features: {}".format(feature_names))
 print("Label: {}".format(label_name))
 #
 # Array of class names, in this case three class names
-class_names = ['Iris setosa', 'Iris versicolor', 'Iris virginica']
+class_names = ['microcustomer', 'smallcustomer', 'mediumcustromer', 'hugecustomer']
 # Create a tf.data.Dataset
 batch_size = 32
 
@@ -53,35 +57,47 @@ train_dataset = tf.data.experimental.make_csv_dataset(
     batch_size,
     column_names=column_names,
     label_name=label_name,
-    num_epochs=1)
+    num_epochs=10,
+    header=True)
+#
 # print batch and features
 features, labels = next(iter(train_dataset))
 print(features)
 #
-plt.scatter(features['petal_length'],
-            features['sepal_length'],
-            c=labels,
-            cmap='viridis')
+#plt.scatter(features['revenue'],
+#            features['segment'],
+#            c=labels,
+#            cmap='viridis')
 
-plt.xlabel("Petal length")
-plt.ylabel("Sepal length")
-plt.show()
+#plt.xlabel("revenue")
+#plt.ylabel("segment")
+#plt.show()
 #
 train_dataset = train_dataset.map(pack_features_vector)
 features, labels = next(iter(train_dataset))
-print(labels)
-print(features[:10])
+print(features[:5])
 #
 # Create a model using keras
 model = tf.keras.Sequential([
-  tf.keras.layers.Dense(10, activation=tf.nn.relu, input_shape=(4,)),  # input shape required
+  tf.keras.layers.Dense(10, activation=tf.nn.relu, input_shape=(1,)),  # input shape required
   tf.keras.layers.Dense(10, activation=tf.nn.relu),
-  tf.keras.layers.Dense(3)
+  tf.keras.layers.Dense(4)
 ])
+# compile model
+print("Compile model: {}".format(MODEL_NAME))
+model.compile(
+  loss='binary_crossentropy',
+  optimizer='adam',
+  metrics=['accuracy'])
+# fit model
+print("Fit model: {}".format(MODEL_NAME))
+model.fit(
+  train_dataset, epochs=10
+)
 #
 # Prediction
 predictions = model(features)
-predictions[:5]
+predictions[:40]
 print("Prediction: {}".format(tf.argmax(predictions, axis=1)))
 print("    Labels: {}".format(labels))
 # Define the loss and gradient function
@@ -128,7 +144,7 @@ for epoch in range(num_epochs):
   train_loss_results.append(epoch_loss_avg.result())
   train_accuracy_results.append(epoch_accuracy.result())
 
-  if epoch % 50 == 0:
+  if epoch % 25 == 0:
     print("Epoch {:03d}: Loss: {:.3f}, Accuracy: {:.3%}".format(epoch,
                                                                 epoch_loss_avg.result(),
                                                                 epoch_accuracy.result()))
@@ -145,9 +161,7 @@ axes[1].plot(train_accuracy_results)
 plt.show()
 
 # Save model
-model.save('models/flower_model.h5')
+model.save(MODEL_NAME)
 #
 #                                                                 
-print("End training...")
-
-
+print("End training segments...")
