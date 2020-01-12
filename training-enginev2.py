@@ -79,8 +79,8 @@ print(features[:5])
 #
 # Create a model using keras
 model = tf.keras.Sequential([
-  tf.keras.layers.Dense(10, activation=tf.nn.relu, input_shape=(1,)),  # input shape required
-  tf.keras.layers.Dense(10, activation=tf.nn.relu),
+  tf.keras.layers.Dense(64, activation=tf.nn.relu, input_shape=(1,)),  # input shape required
+  tf.keras.layers.Dense(64, activation=tf.nn.relu),
   tf.keras.layers.Dense(4)
 ])
 # compile model
@@ -123,7 +123,7 @@ print("Step: {},         Loss: {}".format(optimizer.iterations.numpy(),
 train_loss_results = []
 train_accuracy_results = []
 
-num_epochs = 201
+num_epochs = 401
 
 for epoch in range(num_epochs):
   epoch_loss_avg = tf.keras.metrics.Mean()

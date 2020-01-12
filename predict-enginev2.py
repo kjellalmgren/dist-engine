@@ -22,18 +22,17 @@ model = load_model('models/' + MODEL_NAME)
 # 3 = 31-40 Huge
 #
 predict_dataset = tf.convert_to_tensor([
-    [33.0],
-    [11.66],
-    [22.0],
-    [0.4]
+    [28.0],
+    [18.0],
+    [21.0],
+    [39.4]
 ])
 
 predictions = model(predict_dataset)
-
+#print(predictions)
 for i, logits in enumerate(predictions):
   class_idx = tf.argmax(logits).numpy()
   p = tf.nn.softmax(logits)[class_idx]
   name = class_names[class_idx]
   print("Example {} prediction: segment {} - {} ({:4.1f}%)".format(i, class_idx, name, 100*p))
-
 #
