@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# specific project files
+data/segment*.csv
+models/*.h5
