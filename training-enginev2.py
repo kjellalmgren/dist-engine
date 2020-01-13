@@ -26,13 +26,13 @@ def loss(model, x, y):
 # main entry
 ############
 #
-MODEL_NAME = 'models/segment_model.h5'
+MODEL_NAME = 'models/segment_model_v2.h5'
 #
 print("Tensorflow version: {}".format(tf.version.VERSION))
 #print("TensorFlow version: {}".format(tf.__version__))
 print("Eager execution: {}".format(tf.executing_eagerly()))
 
-train_dataset_url = "https://localhost:8443/v1/segments"
+train_dataset_url = "https://localhost:8443/segment_training_v2"
 
 train_dataset_fp = tf.keras.utils.get_file(fname=os.path.basename(train_dataset_url),
                                            origin=train_dataset_url)

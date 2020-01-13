@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 
 #MODEL_NAME = args.model
-MODEL_NAME = 'segment_model.h5'
+MODEL_NAME = 'segment_model_v2.h5'
 # Array of class names, in this case three class names
 class_names = ['micro customer', 'small customer', 'medium customer', 'huge customer']
 
@@ -22,7 +22,7 @@ model = load_model('models/' + MODEL_NAME)
 # 3 = 31-40 Huge
 #
 predict_dataset = tf.convert_to_tensor([
-    [28.0],
+    [27.0],
     [18.0],
     [21.0],
     [39.4]
