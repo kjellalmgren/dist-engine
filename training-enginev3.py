@@ -59,7 +59,7 @@ train_dataset = tf.data.experimental.make_csv_dataset(
     batch_size,
     column_names=column_names,
     label_name=label_name,
-    num_epochs=10,
+    num_epochs=1,
     header=True)
 #
 # print batch and features
@@ -125,7 +125,7 @@ print("Step: {},         Loss: {}".format(optimizer.iterations.numpy(),
 train_loss_results = []
 train_accuracy_results = []
 
-num_epochs = 101
+num_epochs = 51
 # num_epochs = 401
 
 for epoch in range(num_epochs):
@@ -147,7 +147,7 @@ for epoch in range(num_epochs):
   train_loss_results.append(epoch_loss_avg.result())
   train_accuracy_results.append(epoch_accuracy.result())
 
-  if epoch % 25 == 0:
+  if epoch % 10 == 0:
     print("Epoch {:03d}: Loss: {:.3f}, Accuracy: {:.3%}".format(epoch,
                                                                 epoch_loss_avg.result(),
                                                                 epoch_accuracy.result()))
