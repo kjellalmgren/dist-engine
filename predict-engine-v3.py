@@ -10,7 +10,7 @@ import tensorflow as tf
 #MODEL_NAME = args.model
 MODEL_NAME = 'segment_model_v3.h5'
 # Array of class names, in this case three class names
-class_names = ['Villakund', 'sma och microföretag', 'Boende på gård', 'storkund']
+class_names = ['Villakund', 'små och microföretag', 'Boende på gård', 'storkund']
 
 # Entry point
 print("loading model: {}".format(MODEL_NAME))

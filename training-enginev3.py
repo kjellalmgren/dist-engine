@@ -37,8 +37,10 @@ train_dataset_url = "https://localhost:8443/segment_training_v3"
 train_dataset_fp = tf.keras.utils.get_file(fname=os.path.basename(train_dataset_url),
                                            origin=train_dataset_url)
 # column order in CSV file
+#column_names = ['id', 'revenue', 'segment']
 column_names = ['revenue', 'segment']
 
+#feature_names = column_names[:-1]
 feature_names = column_names[:-1]
 label_name = column_names[-1]
 #
@@ -48,7 +50,7 @@ print("Features: {}".format(feature_names))
 print("Label: {}".format(label_name))
 #
 # Array of class names, in this case three class names
-class_names = ['Villakund', 'sma och microföretag', 'Boende på gård', 'storkund']
+class_names = ['Villakund', 'små och microföretag', 'Boende på gård', 'storkund']
 # Create a tf.data.Dataset
 batch_size = 32
 
@@ -123,7 +125,8 @@ print("Step: {},         Loss: {}".format(optimizer.iterations.numpy(),
 train_loss_results = []
 train_accuracy_results = []
 
-num_epochs = 401
+num_epochs = 101
+# num_epochs = 401
 
 for epoch in range(num_epochs):
   epoch_loss_avg = tf.keras.metrics.Mean()
