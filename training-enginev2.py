@@ -163,5 +163,4 @@ plt.show()
 # Save model
 model.save(MODEL_NAME)
 #
-#                                                                 
 print("End training segments...")

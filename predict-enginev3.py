@@ -22,10 +22,10 @@ model = load_model('models/' + MODEL_NAME)
 # 3 = Storkund
 #
 predict_dataset = tf.convert_to_tensor([
-    [400000.],
-    [22000000.],
-    [8500000],
-    [250000]
+    [400.0],
+    [20.0],
+    [850.0],
+    [320.0]
 ])
 
 predictions = model(predict_dataset)

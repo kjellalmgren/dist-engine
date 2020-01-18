@@ -32,7 +32,7 @@ print("Tensorflow version: {}".format(tf.version.VERSION))
 #print("TensorFlow version: {}".format(tf.__version__))
 print("Eager execution: {}".format(tf.executing_eagerly()))
 
-train_dataset_url = "https://localhost:8443/segment_training_v3"
+train_dataset_url = "https://localhost:8443/segment_training_v32"
 
 train_dataset_fp = tf.keras.utils.get_file(fname=os.path.basename(train_dataset_url),
                                            origin=train_dataset_url)
@@ -53,14 +53,29 @@ print("Label: {}".format(label_name))
 class_names = ['Villakund', 'små och microföretag', 'Boende på gård', 'storkund']
 # Create a tf.data.Dataset
 batch_size = 32
-
+#
+#tf.random.shuffle(
+#  train_dataset_fp,
+#  seed=None,
+#  name=None
+#)
+#
 train_dataset = tf.data.experimental.make_csv_dataset(
     train_dataset_fp,
     batch_size,
     column_names=column_names,
     label_name=label_name,
-    num_epochs=1,
+    num_epochs=10,
     header=True)
+#train_dataset = tf.data.experimental.make_csv_dataset(
+#    train_dataset_fp,
+#    batch_size,
+#    shuffle=True,
+#    shuffle_buffer_size=10000,
+#    column_names=column_names,
+#    label_name=label_name,
+#    num_epochs=10,
+#    header=True)    
 #
 # print batch and features
 features, labels = next(iter(train_dataset))
@@ -77,7 +92,7 @@ print(features)
 #
 train_dataset = train_dataset.map(pack_features_vector)
 features, labels = next(iter(train_dataset))
-print(features[:5])
+print(features[:40])
 #
 # Create a model using keras
 model = tf.keras.Sequential([
@@ -125,8 +140,8 @@ print("Step: {},         Loss: {}".format(optimizer.iterations.numpy(),
 train_loss_results = []
 train_accuracy_results = []
 
-num_epochs = 51
-# num_epochs = 401
+num_epochs = 101
+#num_epochs = 401
 
 for epoch in range(num_epochs):
   epoch_loss_avg = tf.keras.metrics.Mean()
@@ -147,7 +162,7 @@ for epoch in range(num_epochs):
   train_loss_results.append(epoch_loss_avg.result())
   train_accuracy_results.append(epoch_accuracy.result())
 
-  if epoch % 10 == 0:
+  if epoch % 5 == 0:
     print("Epoch {:03d}: Loss: {:.3f}, Accuracy: {:.3%}".format(epoch,
                                                                 epoch_loss_avg.result(),
                                                                 epoch_accuracy.result()))
@@ -165,6 +180,5 @@ plt.show()
 
 # Save model
 model.save(MODEL_NAME)
-#
-#                                                                 
+#                                                        
 print("End training segments...")
