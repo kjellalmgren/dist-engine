@@ -52,7 +52,6 @@ print("Label: {}".format(label_name))
 # Array of class names, in this case three class names
 class_names = ['Villakund', 'små och microföretag', 'Boende på gård', 'storkund']
 # Create a tf.data.Dataset
-batch_size = 32
 #
 #tf.random.shuffle(
 #  train_dataset_fp,
@@ -60,9 +59,14 @@ batch_size = 32
 #  name=None
 #)
 #
+# Batch size should be configured based on size of input data
+batch_size = 1
+#
 train_dataset = tf.data.experimental.make_csv_dataset(
     train_dataset_fp,
     batch_size,
+    shuffle=True,
+    shuffle_buffer_size=10000,
     column_names=column_names,
     label_name=label_name,
     num_epochs=10,

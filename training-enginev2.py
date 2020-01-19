@@ -51,7 +51,7 @@ print("Label: {}".format(label_name))
 class_names = ['microcustomer', 'smallcustomer', 'mediumcustromer', 'hugecustomer']
 # Create a tf.data.Dataset
 batch_size = 32
-
+#
 train_dataset = tf.data.experimental.make_csv_dataset(
     train_dataset_fp,
     batch_size,
