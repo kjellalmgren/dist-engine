@@ -38,10 +38,12 @@ train_dataset_fp = tf.keras.utils.get_file(fname=os.path.basename(train_dataset_
                                            origin=train_dataset_url)
 # column order in CSV file
 #column_names = ['id', 'revenue', 'segment']
-column_names = ['revenue', 'segment']
+column_names = ['id', 'revenue', 'segment']
 
 #feature_names = column_names[:-1]
 feature_names = column_names[:-1]
+print(feature_names)
+
 label_name = column_names[-1]
 #
 print("Local copy of the dataset file: {}".format(train_dataset_fp))
@@ -60,16 +62,14 @@ class_names = ['Villakund', 'små och microföretag', 'Boende på gård', 'stork
 #)
 #
 # Batch size should be configured based on size of input data
-batch_size = 1
+batch_size = 128
 #
 train_dataset = tf.data.experimental.make_csv_dataset(
     train_dataset_fp,
-    batch_size,
-    shuffle=True,
-    shuffle_buffer_size=10000,
+    batch_size=batch_size,
     column_names=column_names,
     label_name=label_name,
-    num_epochs=10,
+    num_epochs=1,
     header=True)
 #train_dataset = tf.data.experimental.make_csv_dataset(
 #    train_dataset_fp,
@@ -83,6 +83,7 @@ train_dataset = tf.data.experimental.make_csv_dataset(
 #
 # print batch and features
 features, labels = next(iter(train_dataset))
+
 print(features)
 #
 #plt.scatter(features['revenue'],
@@ -96,29 +97,37 @@ print(features)
 #
 train_dataset = train_dataset.map(pack_features_vector)
 features, labels = next(iter(train_dataset))
-print(features[:40])
+print(features[:10])
 #
 # Create a model using keras
 model = tf.keras.Sequential([
-  tf.keras.layers.Dense(64, activation=tf.nn.relu, input_shape=(1,)),  # input shape required
-  tf.keras.layers.Dense(64, activation=tf.nn.relu),
-  tf.keras.layers.Dense(4)
+  tf.keras.layers.Dense(32, activation=tf.nn.relu, input_shape=(1,)),  # input shape required
+  tf.keras.layers.Dense(32, activation=tf.nn.relu),
+  tf.keras.layers.Dropout(rate=0.2),
+  tf.keras.layers.Dense(units=4, activation='softmax')
 ])
 # compile model
 print("Compile model: {}".format(MODEL_NAME))
+# loss='binary_crossentropy',
 model.compile(
-  loss='binary_crossentropy',
+  loss='sparse_categorical_crossentropy',
   optimizer='adam',
   metrics=['accuracy'])
 # fit model
 print("Fit model: {}".format(MODEL_NAME))
-model.fit(
-  train_dataset, epochs=10
+#
+history = model.fit(
+  train_dataset,
+  epochs=10
 )
+#
+history = history.history
+print(history)
+#print("Validation accuracy: {}, loss: {}".format(history["val_accuracy"][-1], history["val_loss"][-1]))
 #
 # Prediction
 predictions = model(features)
-predictions[:40]
+predictions[:20]
 print("Prediction: {}".format(tf.argmax(predictions, axis=1)))
 print("    Labels: {}".format(labels))
 # Define the loss and gradient function
@@ -144,7 +153,8 @@ print("Step: {},         Loss: {}".format(optimizer.iterations.numpy(),
 train_loss_results = []
 train_accuracy_results = []
 
-num_epochs = 101
+num_epochs = 51
+#num_epochs = 101
 #num_epochs = 401
 
 for epoch in range(num_epochs):
